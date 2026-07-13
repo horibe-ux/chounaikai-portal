@@ -70,6 +70,41 @@ const API_BASE_URL = import.meta.env.DEV
   : ((import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "http://localhost:4001");
 
 const SESSION_STORAGE_KEY = "chounaikai_session_token";
+const RETRY_ATTEMPTS = 3;
+const RETRY_DELAY_MS = 1200;
+
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function requestJsonWithRetry<T>(url: string, init?: RequestInit): Promise<T> {
+  for (let attempt = 1; attempt <= RETRY_ATTEMPTS; attempt += 1) {
+    try {
+      const res = await fetch(url, init);
+
+      // Render free のコールドスタートで出やすい一時エラーは数回リトライする
+      if ((res.status >= 500 || res.status === 408 || res.status === 429) && attempt < RETRY_ATTEMPTS) {
+        await delay(RETRY_DELAY_MS);
+        continue;
+      }
+
+      return (await res.json()) as T;
+    } catch (err) {
+      if ((err as Error).name === "AbortError") {
+        throw err;
+      }
+
+      if (attempt < RETRY_ATTEMPTS) {
+        await delay(RETRY_DELAY_MS);
+        continue;
+      }
+
+      throw err;
+    }
+  }
+
+  throw new Error("API request failed after retries");
+}
 
 function App() {
   const [loginState, setLoginState] = useState<LoginState>({
@@ -93,11 +128,10 @@ function App() {
     async function loginWithQrToken(qrToken: string) {
       setLoginState({ status: "loading" });
       try {
-        const res = await fetch(
+        const data = await requestJsonWithRetry<LoginResponse>(
           `${API_BASE_URL}/api/login?token=${encodeURIComponent(qrToken)}`,
           { signal: controller.signal }
         );
-        const data: LoginResponse = await res.json();
 
         if (data.success) {
           localStorage.setItem(SESSION_STORAGE_KEY, data.sessionToken);
@@ -120,11 +154,10 @@ function App() {
     async function restoreSession(sessionToken: string) {
       setLoginState({ status: "loading" });
       try {
-        const res = await fetch(`${API_BASE_URL}/api/me`, {
+        const data = await requestJsonWithRetry<MeResponse>(`${API_BASE_URL}/api/me`, {
           headers: { Authorization: `Bearer ${sessionToken}` },
           signal: controller.signal,
         });
-        const data: MeResponse = await res.json();
 
         if (data.success) {
           setLoginState({ status: "success", member: data.member });
@@ -167,11 +200,10 @@ function App() {
       setCircularsState({ status: "loading" });
 
       try {
-        const res = await fetch(
+        const data = await requestJsonWithRetry<CircularsResponse>(
           `${API_BASE_URL}/api/circulars?association=${encodeURIComponent(association)}`,
           { signal: controller.signal }
         );
-        const data: CircularsResponse = await res.json();
 
         if (data.success) {
           setCircularsState({ status: "success", circulars: data.circulars });
@@ -204,7 +236,7 @@ function App() {
     setVoiceErrorMessage(null);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/ask-ai`, {
+      const data = await requestJsonWithRetry<AskAiResponse>(`${API_BASE_URL}/api/ask-ai`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -212,7 +244,6 @@ function App() {
         body: JSON.stringify({ question }),
       });
 
-      const data: AskAiResponse = await res.json();
       if (data.success) {
         setAiAnswer(data.answer);
         setVoiceModalOpen(false);
