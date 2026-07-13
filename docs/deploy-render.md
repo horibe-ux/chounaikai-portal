@@ -26,14 +26,14 @@
 
 Render の Environment で次を設定します。
 
-1. `NODE_ENV=production`
-2. `JWT_SECRET=<十分に長いランダム文字列>`
-3. `GEMINI_API_KEY=<Gemini APIキー>`
+1. `JWT_SECRET=<十分に長いランダム文字列>`
+2. `GEMINI_API_KEY=<Gemini APIキー>`
 
 注意:
 
 - `GEMINI_API_KEY` 未設定でも動作しますが、AI回答はフォールバックになります
 - 評価会で Gemini を使う場合は必ず設定してください
+- `NODE_ENV=production` は Render 側で固定しないでください（ビルド時に devDependencies が省略され失敗するため）
 
 ## 4. デプロイ確認
 
