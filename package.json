@@ -1,0 +1,26 @@
+{
+  "name": "chounaikai-portal",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm install --prefix backend --ignore-scripts && npm install --prefix frontend --ignore-scripts",
+    "dev": "concurrently -n backend,frontend -c blue,green \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:frontend:host": "npm --prefix frontend run dev -- --host 0.0.0.0",
+    "dev:external": "concurrently -n backend,frontend -c blue,green \"npm:dev:backend\" \"npm:dev:frontend:host\"",
+    "demo:prepare": "npm --prefix frontend run build",
+    "demo:server": "npm --prefix backend run dev",
+    "demo:external": "npm run demo:prepare && npm run demo:server",
+    "tunnel:frontend": "ngrok http 5173",
+    "tunnel:frontend:stable": "npx localtunnel@2.0.2 --port 5173 --subdomain chounaikai-portal-demo-20260712",
+    "tunnel:demo:stable": "npx localtunnel@2.0.2 --port 4001 --subdomain chounaikai-portal-demo-20260712",
+    "tunnel:backend": "ngrok http 4001",
+    "qr:url": "npm --prefix backend run qr:url --",
+    "build": "npm --prefix backend run build && npm --prefix frontend run build",
+    "test": "npm --prefix backend run test",
+    "check": "npm run build && npm test"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

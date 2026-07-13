@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: chounaikai-portal
+    runtime: node
+    plan: starter
+    buildCommand: npm install && npm run build
+    startCommand: npm --prefix backend run start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false

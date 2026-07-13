@@ -1,0 +1,42 @@
+[
+  {
+    "id": "A-001",
+    "token": "tk8fJ3nQ2xLp",
+    "name": "田中 太郎",
+    "neighborhood_association": "中央三丁目自治会",
+    "school_district": "昭和小学校区",
+    "payment_status": "済"
+  },
+  {
+    "id": "A-002",
+    "token": "rW7mZ1vBq9Ky",
+    "name": "佐藤 花子",
+    "neighborhood_association": "中央三丁目自治会",
+    "school_district": "昭和小学校区",
+    "payment_status": "未納"
+  },
+  {
+    "id": "A-003",
+    "token": "eT4hN6cXs2Rp",
+    "name": "鈴木 一郎",
+    "neighborhood_association": "緑ヶ丘二丁目自治会",
+    "school_district": "みどり中学校区",
+    "payment_status": "済"
+  },
+  {
+    "id": "A-004",
+    "token": "yU9gL0pFw3Mz",
+    "name": "高橋 美咲",
+    "neighborhood_association": "緑ヶ丘二丁目自治会",
+    "school_district": "みどり中学校区",
+    "payment_status": "済"
+  },
+  {
+    "id": "A-005",
+    "token": "qA2sD5jHk8Nb",
+    "name": "伊藤 健二",
+    "neighborhood_association": "駅前一丁目自治会",
+    "school_district": "昭和小学校区",
+    "payment_status": "未納"
+  }
+]

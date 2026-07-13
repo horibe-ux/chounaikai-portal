@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+/* 高齢者向けユニバーサルデザイン: 基準フォントサイズを大きめに設定 */
+html {
+  font-size: 18px;
+}
+
+body {
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
