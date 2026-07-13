@@ -2,7 +2,7 @@ services:
   - type: web
     name: chounaikai-portal
     runtime: node
-    plan: starter
+    plan: free
     buildCommand: npm install && npm run build
     startCommand: npm --prefix backend run start
     healthCheckPath: /api/health
