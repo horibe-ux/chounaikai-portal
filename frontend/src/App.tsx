@@ -67,7 +67,7 @@ type SpeechWindow = Window & {
 
 const API_BASE_URL = import.meta.env.DEV
   ? ((import.meta.env.VITE_DEV_API_BASE_URL as string | undefined) ?? "")
-  : ((import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "http://localhost:4001");
+  : ((import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "");
 
 const SESSION_STORAGE_KEY = "chounaikai_session_token";
 const RETRY_ATTEMPTS = 3;
